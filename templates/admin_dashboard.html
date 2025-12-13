@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <h2 class="mb-4 display-5 fw-bold" style="color: var(--text-color);">
+        <i class="bi bi-person-workspace me-2"></i> Administrator Dashboard
+    </h2>
+
+    <div class="row mb-5 g-4">
+        <div class="col-md-4">
+            <div class="card p-3 h-100 bg-primary text-white">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-people-fill display-4 me-4"></i>
+                    <div>
+                        <h5 class="card-title fw-light mb-0">Total Users</h5>
+                        <p class="display-6 fw-bold mb-0">{{ users|length if users is iterable else 0 }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card p-3 h-100 bg-success text-white">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-collection-fill display-4 me-4"></i>
+                    <div>
+                        <h5 class="card-title fw-light mb-0">Total Books</h5>
+                        <p class="display-6 fw-bold mb-0">{{ books|length if books is iterable else 0 }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         
+    </div>
+
+    <div class="card mb-5">
+        <div class="card-header">
+            <h4 class="mb-0 text-white"><i class="bi bi-person-lines-fill me-2"></i> User Management</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                {% if user.status.value == 'active' %}
+                                    <span class="badge rounded-pill bg-success-subtle text-success fw-bold">Active</span>
+                                {% elif user.status.value == 'blocked' %}
+                                    <span class="badge rounded-pill bg-danger-subtle text-danger fw-bold">Blocked</span>
+                                {% else %}
+                                    <span class="badge rounded-pill bg-secondary fw-bold">{{ user.status.value }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {% if user.status.value == 'blocked' %}
+                                    <form action="{{ url_for('unblock_user', user_id=user.id) }}" method="post" style="display:inline-block;">
+                                        <button class="btn btn-sm btn-outline-success">
+                                            <i class="bi bi-check-circle"></i> Unblock
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <form action="{{ url_for('block_user', user_id=user.id) }}" method="post" style="display:inline-block;">
+                                        <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Block {{ user.username }}?')">
+                                            <i class="bi bi-slash-circle"></i> Block
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h4 class="mb-0 text-white"><i class="bi bi-book-half me-2"></i> Book Management</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Owner</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Type</th>
+                            <th scope="col" class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in books %}
+                        <tr>
+                            <td>{{ book.id }}</td>
+                            <td class="fw-bold">{{ book.title }}</td>
+                            <td>{{ book.owner.username }}</td>
+                            <td>{{ book.category.name if book.category else '-' }}</td>
+                            <td>{{ book.book_type }}</td>
+                                                        <td class="text-center">
+                                <form action="{{ url_for('admin_delete_book', book_id=book.id) }}" method="post" style="display:inline-block;">
+                                    <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to permanently delete the book: {{ book.title }}?')">
+                                        <i class="bi bi-trash-fill"></i> Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

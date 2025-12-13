@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}My Books - Book Sharing Platform{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4 display-5 fw-bold" style="color: var(--text-color);">
+    <i class="bi bi-collection-fill me-2"></i> My Listed Books
+</h2>
+
+<div class="card shadow-lg">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0 text-white"><i class="bi bi-list-task me-2"></i> Book Inventory</h4>
+        <a href="{{ url_for('book_form') }}" class="btn btn-sm btn-outline-light fw-bold">
+            <i class="bi bi-plus-circle-fill me-2"></i> Add New Book
+        </a>
+    </div>
+
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 5%;">ID</th>
+                        <th scope="col" style="width: 25%;">Title</th>
+                        <th scope="col" style="width: 15%;">Author</th>
+                        <th scope="col" style="width: 15%;">Category</th>
+                        <th scope="col" style="width: 10%;">Type</th>
+                        <th scope="col" style="width: 10%;">Status</th>
+                        <th scope="col" class="text-center" style="width: 20%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                    <tr class="{% if book.status == 'unavailable' %}table-warning bg-opacity-10{% endif %}">
+                        <td>{{ book.id }}</td>
+                        <td class="fw-bold">{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.category.name if book.category else '-' }}</td>
+                        <td>
+                            {% if book.book_type == 'physical' %}
+                                <span class="badge bg-info-subtle text-info"><i class="bi bi-book"></i> Physical</span>
+                            {% else %}
+                                <span class="badge bg-secondary-subtle text-secondary"><i class="bi bi-file-earmark-text"></i> Digital</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if book.status == 'available' %}
+                                <span class="borrow-status-label status-accepted">Available</span>
+                            {% elif book.status == 'unavailable' %}
+                                <span class="borrow-status-label status-rejected">Unavailable</span>
+                            {% else %}
+                                <span class="borrow-status-label status-returned">{{ book.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <a href="{{ url_for('book_form', id=book.id) }}" class="btn btn-sm btn-outline-primary me-2">
+                                <i class="bi bi-pencil-fill"></i> Edit
+                            </a>
+                            <form action="{{ url_for('delete_book', id=book.id) }}" method="post" style="display:inline-block;">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" 
+                                        onclick="return confirm('WARNING: Are you sure you want to delete the book: {{ book.title }}?')">
+                                    <i class="bi bi-trash-fill"></i> Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5">
+                            <i class="bi bi-book-half display-4 text-muted d-block mb-3"></i>
+                            <span class="text-muted fw-bold fs-5">You haven't added any books to your inventory yet.</span>
+                            <a href="{{ url_for('book_form') }}" class="btn btn-primary mt-3">
+                                <i class="bi bi-plus-circle-fill me-2"></i> Start Sharing Now
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

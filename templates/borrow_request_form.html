@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Request to Borrow: {{ book.title }} - Book Sharing Platform{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-7 col-md-9">
+        <div class="card p-4">
+            <h2 class="card-title text-center mb-5 display-6" style="color: var(--primary-color);">
+                <i class="bi bi-send-fill me-2"></i> Borrow Request
+            </h2>
+            
+            <h4 class="text-center mb-4 fw-light">Requesting: **{{ book.title }}** by *{{ book.author }}*</h4>
+            
+            <form method="post">
+                <div class="alert alert-info border-info border-2" role="alert">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    Propose a convenient date, time, and location for meeting the owner to exchange the book.
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label for="proposed_date" class="form-label fw-bold">Proposed Date</label>
+                        <input type="date" class="form-control form-control-lg" id="proposed_date" name="proposed_date" required>
+                        <small class="form-text text-muted">The day you wish to meet.</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="proposed_time" class="form-label fw-bold">Proposed Time</label>
+                        <input type="time" class="form-control form-control-lg" id="proposed_time" name="proposed_time" required>
+                        <small class="form-text text-muted">The time slot for the exchange.</small>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <label for="proposed_location" class="form-label fw-bold">Proposed Location</label>
+                    <input type="text" class="form-control form-control-lg" id="proposed_location" name="proposed_location" 
+                           placeholder="e.g., Downtown Cafe, Library Entrance, User's Public Meetup Point" required>
+                    <small class="form-text text-muted">Be specific about the public location for the exchange.</small>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-lg btn-success">
+                        <i class="bi bi-envelope-check-fill me-2"></i> Send Borrow Request
+                    </button>
+                </div>
+            </form>
+            
+            <div class="text-center mt-3">
+                <a href="{{ url_for('search_books') }}" class="text-muted text-decoration-none">
+                    <i class="bi bi-arrow-left me-1"></i> Back to search
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+Why Here it is giving me StatementError
+sqlalchemy.exc.StatementError: (builtins.TypeError) SQLite Date type only accepts Python date objects as input.
+[SQL: INSERT INTO borrow_requests (book_id, borrower_id, owner_id, proposed_date, proposed_time, proposed_location, owner_proposed_date, owner_proposed_time, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: [{'book_id': 1, 'proposed_location': 'Multan', 'borrower_id': 2, 'proposed_time': '12:42', 'owner_id': 1, 'proposed_date': '2025-12-14', 'status': 'pending', 'owner_proposed_time': None, 'owner_proposed_date': None}]]

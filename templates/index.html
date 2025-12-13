@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Welcome to Book Sharing Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="py-5 text-center text-white bg-primary" style="background: linear-gradient(135deg, #5d5dff, #212529); margin-bottom: 4rem;">
+    <div class="container py-5">
+        <h1 class="display-4 fw-bold mb-4">Welcome to Book Sharing Platform</h1>
+        <p class="lead mb-5">Discover, share, and borrow books — both physical and digital — with a vibrant community of readers near you.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{{ url_for('register') }}" class="btn btn-light btn-lg px-5 py-3">Get Started</a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg px-5 py-3">Login</a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center g-5">
+            <!-- Feature 1: Community Libraries -->
+            <div class="col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="https://media.istockphoto.com/id/1805651010/photo/children-visiting-the-library.jpg?s=612x612&w=0&k=20&c=6A3PWXGcKp-v0qercMT5VF409W2kvyFUwPIpy5DadFI=" alt="Community reading and sharing books in a modern library" class="card-img-top book_image img-fluid rounded-top" style="height: 250px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <i class="bi bi-people fs-1 text-primary mb-3"></i>
+                        <h3 class="h4">Connect with Readers</h3>
+                        <p class="text-muted flex-grow-1">Meet like-minded book lovers in your area and build a local reading community.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 2: Diverse Books -->
+            <div class="col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="https://static.vecteezy.com/system/resources/previews/045/712/791/large_2x/a-close-up-shot-of-a-stack-of-books-on-a-wooden-table-with-a-blurred-library-background-photo.jpg" alt="Cozy stack of diverse books on a table" class="card-img-top book_image img-fluid rounded-top" style="height: 250px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <i class="bi bi-book-half fs-1 text-primary mb-3"></i>
+                        <h3 class="h4">Share Your Library</h3>
+                        <p class="text-muted flex-grow-1">List your physical or digital books and make them available for others to borrow.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 3: Physical & Digital -->
+            <div class="col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="https://static.vecteezy.com/system/resources/previews/045/712/791/large_2x/a-close-up-shot-of-a-stack-of-books-on-a-wooden-table-with-a-blurred-library-background-photo.jpg" alt="Cozy stack of diverse books on a table" class="card-img-top book_image img-fluid rounded-top" style="height: 250px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <i class="bi bi-cloud-download fs-1 text-primary mb-3"></i>
+                        <h3 class="h4">Physical & Digital Books</h3>
+                        <p class="text-muted flex-grow-1">Borrow in-person or download digital copies instantly — all in one platform.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="py-5 text-center bg-white">
+    <div class="container py-5">
+        <h2 class="display-5 fw-bold mb-4">Ready to Start Sharing?</h2>
+        <p class="lead mb-5">Join thousands of readers today and expand your reading horizons.</p>
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-5 py-3">Sign Up for Free</a>
+    </div>
+</section>
+{% endblock %}

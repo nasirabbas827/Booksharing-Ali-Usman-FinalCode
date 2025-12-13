@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Register - Book Sharing Platform{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+        <div class="card p-4">
+            <h2 class="card-title text-center mb-4 display-6" style="color: var(--primary-color);">
+                <i class="bi bi-person-plus-fill me-2"></i> Create Account
+            </h2>
+            <form method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label fw-bold">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Choose a unique username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-bold">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label fw-bold">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Must be at least 8 characters" required>
+                </div>
+
+                <hr class="my-4">
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="full_name" class="form-label fw-bold">Full Name</label>
+                        <input type="text" class="form-control" id="full_name" name="full_name" placeholder="John Doe">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="location" class="form-label fw-bold">Location</label>
+                        <input type="text" class="form-control" id="location" name="location" placeholder="City, Country">
+                    </div>
+                </div>
+
+                <div class="d-grid mt-5">
+                    <button type="submit" class="btn btn-lg btn-primary">
+                        <i class="bi bi-person-check-fill me-2"></i> Register Now
+                    </button>
+                </div>
+            </form>
+            
+            <p class="mt-4 text-center text-muted">
+                Already have an account? <a href="{{ url_for('login') }}" class="text-decoration-none" style="color: var(--primary-color);">Login here</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

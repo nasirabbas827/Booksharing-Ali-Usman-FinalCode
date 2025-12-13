@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if category else 'Add' }} Category - Book Sharing Platform{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-5 col-md-7 col-sm-10">
+        <div class="card p-4">
+            <h2 class="card-title text-center mb-5 display-6" style="color: var(--primary-color);">
+                {% if category %}
+                    <i class="bi bi-pencil-square me-2"></i> Edit Category
+                {% else %}
+                    <i class="bi bi-folder-plus-fill me-2"></i> Add New Category
+                {% endif %}
+            </h2>
+            
+            <form method="post">
+                <div class="mb-4">
+                    <label for="category_name" class="form-label fw-bold">Category Name</label>
+                    <input type="text" class="form-control form-control-lg" id="category_name" name="name" 
+                           placeholder="e.g., Science Fiction, Romance, History" 
+                           value="{{ category.name if category else '' }}" required>
+                </div>
+                
+                <div class="d-grid gap-2 mb-3">
+                    <button type="submit" class="btn btn-lg btn-primary">
+                        {% if category %}
+                            <i class="bi bi-save-fill me-2"></i> Update Category
+                        {% else %}
+                            <i class="bi bi-plus-circle-fill me-2"></i> Add Category
+                        {% endif %}
+                    </button>
+                </div>
+                
+                <div class="d-grid">
+                    <a href="{{ url_for('categories') }}" class="btn btn-lg btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i> Back to Categories
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

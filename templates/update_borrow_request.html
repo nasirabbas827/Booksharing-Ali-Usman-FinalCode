@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Manage Borrow Request: {{ borrow_req.book.title }} - Book Sharing Platform{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <h2 class="mb-4 display-5 fw-bold" style="color: var(--text-color);">
+        <i class="bi bi-pencil-square me-2"></i> Manage Borrow Request
+    </h2>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-book me-2"></i>
+                        Book: <strong>{{ borrow_req.book.title }}</strong> by {{ borrow_req.book.author }}
+                    </h4>
+                </div>
+                <div class="card-body">
+
+                    <!-- Borrower Info -->
+                    <div class="alert alert-light border-start border-primary border-4 mb-4">
+                        <i class="bi bi-person-circle me-2 text-primary"></i>
+                        <strong>Borrower:</strong> {{ borrow_req.borrower.username }}
+                        {% if borrow_req.borrower.full_name %} ({{ borrow_req.borrower.full_name }}){% endif %}
+                        {% if borrow_req.borrower.location %} • Location: {{ borrow_req.borrower.location }}{% endif %}
+                    </div>
+
+                    <!-- Borrower's Original Proposal -->
+                    <div class="mb-5 p-4 bg-light rounded">
+                        <h5 class="fw-bold text-primary mb-3">
+                            <i class="bi bi-calendar-check me-2"></i> Borrower's Proposed Details
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <strong>Date:</strong> {{ borrow_req.proposed_date or '—' }}
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Time:</strong> {{ borrow_req.proposed_time or '—' }}
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Location:</strong> {{ borrow_req.proposed_location or '—' }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Owner's Response Form -->
+                    <form method="post">
+                        <h5 class="fw-bold text-primary mb-4">
+                            <i class="bi bi-reply-fill me-2"></i> Your Response
+                        </h5>
+
+                        <div class="mb-4">
+                            <label for="status" class="form-label fw-bold">Action</label>
+                            <select id="status" name="status" class="form-select form-select-lg" required>
+                                <option value="accepted" {% if borrow_req.status.value == 'accepted' %}selected{% endif %}>
+                                    Accept Request
+                                </option>
+                                <option value="rejected" {% if borrow_req.status.value == 'rejected' %}selected{% endif %}>
+                                    Reject Request
+                                </option>
+                                <option value="modified" {% if borrow_req.status.value == 'modified' %}selected{% endif %}>
+                                    Counter-Propose New Date/Time
+                                </option>
+                            </select>
+                            <div class="form-text">
+                                Choose "Counter-Propose" if you'd like to suggest a different meeting time.
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label for="owner_proposed_date" class="form-label fw-bold">Your Proposed Date (optional)</label>
+                                <input type="date"
+                                       id="owner_proposed_date"
+                                       name="owner_proposed_date"
+                                       class="form-control form-control-lg"
+                                       value="{{ borrow_req.owner_proposed_date or '' }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="owner_proposed_time" class="form-label fw-bold">Your Proposed Time (optional)</label>
+                                <input type="time"
+                                       id="owner_proposed_time"
+                                       name="owner_proposed_time"
+                                       class="form-control form-control-lg"
+                                       value="{{ borrow_req.owner_proposed_time or '' }}">
+                            </div>
+                        </div>
+
+                        <div class="d-grid d-md-flex gap-3">
+                            <button type="submit" class="btn btn-lg btn-success flex-grow-1">
+                                <i class="bi bi-check-circle-fill me-2"></i> Update Request
+                            </button>
+                            <a href="{{ url_for('messages', borrow_request_id=borrow_req.id) }}"
+                               class="btn btn-lg btn-info flex-grow-1 mt-3 mt-md-0">
+                                <i class="bi bi-chat-dots-fill me-2"></i> View Messages
+                            </a>
+                        </div>
+                    </form>
+
+                    <!-- Current Status Badge -->
+                    <div class="mt-5 text-center">
+                        <span class="fs-5 fw-bold">Current Status:</span>
+                        <span class="borrow-status-label ms-3
+                            {% if borrow_req.status.value == 'pending' %}status-pending
+                            {% elif borrow_req.status.value == 'accepted' %}status-accepted
+                            {% elif borrow_req.status.value == 'rejected' %}status-rejected
+                            {% elif borrow_req.status.value == 'modified' %}status-modified
+                            {% elif borrow_req.status.value == 'returned' %}status-returned
+                            {% endif %}">
+                            {{ borrow_req.status.value|title }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{{ url_for('incoming_requests') }}" class="text-muted text-decoration-none">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Incoming Requests
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

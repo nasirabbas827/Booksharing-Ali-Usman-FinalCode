@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if book else 'Add' }} Book - Book Sharing Platform{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-10">
+        <div class="card p-4">
+            <h2 class="card-title text-center mb-5 display-6" style="color: var(--primary-color);">
+                {% if book %}
+                    <i class="bi bi-book-half me-2"></i> Edit Book Details
+                {% else %}
+                    <i class="bi bi-plus-square-fill me-2"></i> Add New Book
+                {% endif %}
+            </h2>
+            
+            <form method="post" enctype="multipart/form-data">
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <h5 class="mb-3 fw-bold" style="color: var(--primary-color);">Publication Details</h5>
+                        
+                        <div class="mb-3">
+                            <label for="title" class="form-label fw-bold">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" 
+                                   placeholder="The Book Title" value="{{ book.title if book else '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="author" class="form-label fw-bold">Author</label>
+                            <input type="text" class="form-control" id="author" name="author" 
+                                   placeholder="Author's Name" value="{{ book.author if book else '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="category_id" class="form-label fw-bold">Category</label>
+                            <select class="form-select" id="category_id" name="category_id" required>
+                                <option value="" disabled selected>--- Select Category ---</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if book and book.category_id == category.id %}selected{% endif %}>
+                                        {{ category.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h5 class="mb-3 fw-bold" style="color: var(--primary-color);">Description</h5>
+                        <div class="mb-3 h-100">
+                            <label for="description" class="form-label fw-bold">Book Summary</label>
+                            <textarea class="form-control h-100" id="description" name="description" 
+                                      placeholder="A brief summary of the book (max 500 characters)">{{ book.description if book else '' }}</textarea>
+                        </div>
+                    </div>
+                </div> <hr class="my-4">
+
+                <div class="row g-4 mb-5">
+                    <div class="col-md-6">
+                        <h5 class="mb-3 fw-bold text-danger">Type and Status</h5>
+                        
+                        <div class="mb-3">
+                            <label for="book_type" class="form-label fw-bold">Book Type</label>
+                            <select class="form-select" name="book_type" id="book_type" required onchange="toggleFields()">
+                                <option value="physical" {% if book and book.book_type == 'physical' %}selected{% endif %}>Physical Copy</option>
+                                <option value="digital" {% if book and book.book_type == 'digital' %}selected{% endif %}>Digital Copy (E-Book)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="status" class="form-label fw-bold">Lending Status</label>
+                            <select class="form-select" name="status" id="status" required>
+                                <option value="available" {% if book and book.status=='available' %}selected{% endif %}>Available for Borrowing</option>
+                                <option value="unavailable" {% if book and book.status=='unavailable' %}selected{% endif %}>Unavailable (e.g., Damaged, Archvied)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h5 class="mb-3 fw-bold text-danger">Location/File Details</h5>
+                        
+                        <div id="physical_fields">
+                            <div class="mb-3">
+                                <label for="physical_location" class="form-label fw-bold">Physical Location</label>
+                                <input type="text" class="form-control" id="physical_location" name="physical_location" 
+                                       placeholder="Where is the physical book stored?" value="{{ book.physical_location if book else '' }}">
+                            </div>
+                        </div>
+                        
+                        <div id="digital_fields">
+                            <div class="mb-3">
+                                <label for="file_path" class="form-label fw-bold">Upload E-Book File (Optional)</label>
+                                <input type="file" class="form-control" id="file_path" name="file_path">
+                            </div>
+                            <div class="mb-3">
+                                <label for="download_link" class="form-label fw-bold">External Download Link (Optional)</label>
+                                <input type="text" class="form-control" id="download_link" name="download_link" 
+                                       placeholder="Paste external link (e.g., Google Drive)" value="{{ book.download_link if book else '' }}">
+                            </div>
+                        </div>
+                    </div>
+                </div> <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                    <a href="{{ url_for('books') }}" class="btn btn-lg btn-outline-secondary me-md-2">
+                        <i class="bi bi-x-lg me-2"></i> Cancel / Back to Books
+                    </a>
+                    <button type="submit" class="btn btn-lg btn-success">
+                        <i class="bi bi-save-fill me-2"></i> {{ 'Update' if book else 'Add' }} Book
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleFields() {
+    var type = document.getElementById('book_type').value;
+    var physicalFields = document.getElementById('physical_fields');
+    var digitalFields = document.getElementById('digital_fields');
+
+    // Use display: flex/grid or visibility hidden if you prefer, but block/none is simpler for basic show/hide
+    physicalFields.style.display = type === 'physical' ? 'block' : 'none';
+    digitalFields.style.display = type === 'digital' ? 'block' : 'none';
+}
+
+// Initialize fields on page load
+document.addEventListener('DOMContentLoaded', toggleFields); 
+</script>
+{% endblock %}
